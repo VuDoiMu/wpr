@@ -1,18 +1,25 @@
 const express = require("express");
 const path = require("path");
-const bodyParser = require("body-parser");
 const mysql = require("mysql2");
 const app = express();
 app.set("view engine", "ejs");
 
 // Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Set up routes
-app.use("/", (req, res) => {
-  res.render("index"); // This will render the index.ejs file
-});
+// app.use("/", (req, res) => {
+//   if (req.body) {
+//     console.log(req.body);
+//   }
+//   res.render("index", ); // This will render the index.ejs file
+// });
+
+app.post("/api/login", (req, res) => {
+  console.log("here", req.body.zxc)
+  res.send('what')
+})
 // app.use("/users", usersRoute);
 
 // Error handling middleware
