@@ -1,4 +1,4 @@
-const mysql = require("mysql2");
+import mysql from "mysql2";
 
 const dbConfig = {
   host: "localhost",
@@ -28,3 +28,5 @@ initSQL.forEach((sql) => {
     }
   });
 });
+
+export default db
