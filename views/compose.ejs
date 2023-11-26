@@ -37,17 +37,17 @@
     </form>
 
     <script>
-        const form = document.getElementById("emailForm");
+        const form = document.querySelector("#emailForm");
         const formData = new FormData();
 
         form.addEventListener("submit", (event) => {
             event.preventDefault();
 
-            const receiver = document.getElementById("receiver").value;
-            const subject = document.getElementById("subject").value;
-            const body = document.getElementById("body").value;
-            const attachment = document.getElementById("attachment")
-            const receiverError = document.getElementById("receiverError");
+            const receiver = document.querySelector("#receiver").value;
+            const subject = document.querySelector("#subject").value;
+            const body = document.querySelector("#body").value;
+            const attachment = document.querySelector("#attachment")
+            const receiverError = document.querySelector("#receiverError");
 
             if (!receiver) {
                 receiverError.textContent = "Receiver is required!";

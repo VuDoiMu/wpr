@@ -26,17 +26,17 @@
     <p>Already has an account? <button onclick="window.location.href='/signin'">Sign In Now!</button> </p>
 
     <script>
-        document.getElementById('signUpForm').addEventListener('submit', function (event) {
+        document.querySelector('#signUpForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent the form from submitting normally
 
-            const userName = document.getElementById('userNameInput').value;
-            const email = document.getElementById('emailInput').value;
-            const password = document.getElementById('passwordInput').value;
-            const rePassword = document.getElementById('rePasswordInput').value;
-            const userNameError = document.getElementById('userNameError')
-            const emailError = document.getElementById('emailError')
-            const passwordError = document.getElementById('passwordError')
-            const rePasswordError = document.getElementById('rePasswordError');
+            const userName = document.querySelector('#userNameInput').value;
+            const email = document.querySelector('#emailInput').value;
+            const password = document.querySelector('#passwordInput').value;
+            const rePassword = document.querySelector('#rePasswordInput').value;
+            const userNameError = document.querySelector('#userNameError')
+            const emailError = document.querySelector('#emailError')
+            const passwordError = document.querySelector('#passwordError')
+            const rePasswordError = document.querySelector('#rePasswordError');
 
 
             if (userName === "") {
@@ -88,7 +88,7 @@
                     .then(res => res.json())
                     .then(data => {
                         if (data.status === 'Email already used') {
-                            document.getElementById('emailError').textContent = 'Email already used';
+                            document.querySelector('#emailError').textContent = 'Email already used';
                         }
 
                         if (data.status === 'success') {

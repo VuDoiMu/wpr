@@ -19,13 +19,13 @@
     <p>No account? <button onclick="window.location.href='/signup'">Sign Up Now!</button> </p>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function (event) {
+        document.querySelector('#loginForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent the form from submitting normally
 
-            const email = document.getElementById('emailInput').value;
-            const password = document.getElementById('passwordInput').value;
-            const emailError = document.getElementById('emailError')
-            const passwordError = document.getElementById('passwordError')
+            const email = document.querySelector('#emailInput').value;
+            const password = document.querySelector('#passwordInput').value;
+            const emailError = document.querySelector('#emailError')
+            const passwordError = document.querySelector('#passwordError')
             if (email === "") {
                 emailError.textContent = 'Email cannot be empty';
             }
@@ -53,11 +53,11 @@
                     .then(res => res.json())
                     .then(data => {
                         if (data.status === 'Email not found') {
-                            document.getElementById('emailError').textContent = 'Email not found';
+                            document.querySelector('#emailError').textContent = 'Email not found';
                         }
 
                         if (data.status === 'Wrong password') {
-                            document.getElementById('passwordError').textContent = 'Wrong password';
+                            document.querySelector('#passwordError').textContent = 'Wrong password';
                         }
 
                         if (data.status === 'success') {
