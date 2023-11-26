@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compose</title>
+</head>
+
+<body>
+    <h1>Composing</h1>
+    <form id="emailForm">
+        <label for="receiver">Receiver: </label>
+        <select id="receiver" name="receiver" required>
+            <% if (autofillData.receiver) { %>
+                <option value="<%= autofillData.receiver %>">
+                    <%= autofillData.receiver %>
+                </option>
+                <% } %>
+                    <% for (let i=0; i <autofillData.userList.length; i++) { %>
+                        <option value="<%= autofillData.userList[i].email %>">
+                            <%= autofillData.userList[i].name %> (<%= autofillData.userList[i].email %>)
+                        </option>
+                        <% } %>
+        </select>
+        <div id="receiverError"></div>
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" value="<%= autofillData.subject %>" placeholder="(no subject)"
+            required>
+        <br>
+        <label for="body">Body:</label><br>
+        <textarea id="body" name="body"></textarea>
+        <br>
+        <input type="file" id="attachment" name="attachment">
+        <br>
+        <button>Send</button>
+    </form>
+
+    <script>
+        const form = document.getElementById("emailForm");
+        const formData = new FormData();
+
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const receiver = document.getElementById("receiver").value;
+            const subject = document.getElementById("subject").value;
+            const body = document.getElementById("body").value;
+            const attachment = document.getElementById("attachment")
+            const receiverError = document.getElementById("receiverError");
+
+            if (!receiver) {
+                receiverError.textContent = "Receiver is required!";
+            } else {
+                receiverError.textContent = ""
+            }
+
+            if (receiver) {
+                formData.append('receiver', receiver)
+                formData.append('subject', subject)
+                formData.append('body', body);
+                formData.append('attachment', attachment.files[0])
+                console.log(attachment.files[0])
+                fetch("/compose", {
+                    method: "POST",
+                    body: formData,
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data.data)
+                        showAlert(data.data)
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+        });
+
+        const showAlert = (message) => {
+            alert(message)
+        }
+    </script>
+</body>
+
+</html>

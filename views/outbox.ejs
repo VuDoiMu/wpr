@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outbox</title>
+</head>
+
+<body>
+    <h1>Outbox</h1>
+    <button onclick="window.location.href='/compose'">Compose</button>
+    <button onclick="window.location.href='/inbox'">Inbox</button>
+    <table>
+        <thead>
+            <tr>
+                <th>To</th>
+                <th>Subject</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (Array.isArray(outboxItems)) { %>
+                <% outboxItems.forEach(function(item) { %>
+                    <tr>
+                        <td><a href="/emailDetail/<%= item.id %>">
+                                <%= item.receiver.name %>
+                            </a></td>
+                        <td><a href="/emailDetail/<%= item.id %>">
+                                <%= item.subject %>
+                            </a></td>
+                    </tr>
+                    <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="2">No items found.</td>
+                            </tr>
+                            <% } %>
+        </tbody>
+    </table>
+
+
+</body>
+
+</html>

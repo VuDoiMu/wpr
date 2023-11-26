@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sign Up</title>
+</head>
+
+<body>
+    <h1>Sign Up</h1>
+    <form id="signUpForm">
+        <label for="userNameInput">User Name:</label><br>
+        <input type="text" id="userNameInput" name="userName"><br>
+        <div id="userNameError"></div>
+        <label for="emailInput">Email:</label><br>
+        <input type="email" id="emailInput" name="email"><br>
+        <div id="emailError"></div>
+        <label for="passwordInput">Password:</label><br>
+        <input type="password" id="passwordInput" name="password"><br>
+        <div id="passwordError"></div>
+        <label for="rePasswordInput">Re-enter Password:</label><br>
+        <input type="password" id="rePasswordInput" name="rePassword"><br>
+        <div id="rePasswordError"></div>
+        <br>
+        <input type="submit" value="Sign Up">
+    </form>
+    <p>Already has an account? <button onclick="window.location.href='/signin'">Sign In Now!</button> </p>
+
+    <script>
+        document.getElementById('signUpForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            const userName = document.getElementById('userNameInput').value;
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            const rePassword = document.getElementById('rePasswordInput').value;
+            const userNameError = document.getElementById('userNameError')
+            const emailError = document.getElementById('emailError')
+            const passwordError = document.getElementById('passwordError')
+            const rePasswordError = document.getElementById('rePasswordError');
+
+
+            if (userName === "") {
+                userNameError.textContent = 'User name cannot be empty';
+            }
+
+            if (userName != "") {
+                userNameError.textContent = '';
+            }
+
+            if (email === "") {
+                emailError.textContent = 'Email cannot be empty';
+            }
+
+            if (email != "") {
+                emailError.textContent = '';
+            }
+
+            if (password.length < 6) {
+                passwordError.textContent = 'The password must have 6 or more characters';
+            }
+
+            if (password != "") {
+                passwordError.textContent = ""
+            }
+
+            if (rePassword === password) {
+                rePasswordError.textContent = ""
+            }
+
+            if (rePassword === "") {
+                rePasswordError.textContent = "Password repeat cannot be empty"
+            }
+
+            if (rePassword != password) {
+                rePasswordError.textContent = 'Password repeat does not match';
+            }
+
+
+
+            if (password.length >= 6 && email != "" && rePassword === password && userName != "") {
+                fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email, password: password, userName: userName })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'Email already used') {
+                            document.getElementById('emailError').textContent = 'Email already used';
+                        }
+
+                        if (data.status === 'success') {
+                            showAlert()
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            }
+        });
+
+        const showAlert = () => {
+            const redirect = confirm('Registration success! \n Do you want to go to login page now?')
+            { redirect && (window.location.href = '/signin') }
+        }
+    </script>
+</body>
+
+</html>
