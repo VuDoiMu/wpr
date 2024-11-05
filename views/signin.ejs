@@ -1,76 +1,83 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <title>Login</title>
-</head>
-
-<body>
-    <h1>Login</h1>
-    <form id="loginForm">
-        <label for="emailInput">Email:</label><br>
-        <input type="email" id="emailInput" name="email"><br>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In</title>
+    <link rel="stylesheet" href="/styles/signin.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Login</h1>
+      <form id="loginForm">
+        <label for="emailInput">Email:</label><br />
+        <input type="email" id="emailInput" name="email" /><br />
         <div id="emailError"></div>
-        <label for="passwordInput">Password:</label><br>
-        <input type="password" id="passwordInput" name="password"><br>
+        <label for="passwordInput">Password:</label><br />
+        <input type="password" id="passwordInput" name="password" /><br />
         <div id="passwordError"></div>
-        <input type="submit" value="Login">
-    </form>
-    <p>No account? <button onclick="window.location.href='/signup'">Sign Up Now!</button> </p>
+        <input type="submit" value="Login" />
+      </form>
+      <p>
+        No account?
+        <button onclick="window.location.href='/signup'">Sign Up Now!</button>
+      </p>
+    </div>
+  </body>
+  <script>
+    document
+      .querySelector("#loginForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
 
-    <script>
-        document.querySelector('#loginForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent the form from submitting normally
+        const email = document.querySelector("#emailInput").value;
+        const password = document.querySelector("#passwordInput").value;
+        const emailError = document.querySelector("#emailError");
+        const passwordError = document.querySelector("#passwordError");
+        if (email === "") {
+          emailError.textContent = "Email cannot be empty";
+        }
 
-            const email = document.querySelector('#emailInput').value;
-            const password = document.querySelector('#passwordInput').value;
-            const emailError = document.querySelector('#emailError')
-            const passwordError = document.querySelector('#passwordError')
-            if (email === "") {
-                emailError.textContent = 'Email cannot be empty';
-            }
+        if (email != "" && emailError.textContent != "") {
+          emailError.textContent = "";
+        }
 
-            if (email != "" && emailError.textContent != "") {
-                emailError.textContent = '';
-            }
+        if (password === "") {
+          passwordError.textContent = "Password cannot be empty";
+        }
 
-            if (password === "") {
-                passwordError.textContent = 'Password cannot be empty';
-            }
+        if (password != "" && passwordError.textContent != "") {
+          passwordError.textContent = "";
+        }
 
-            if (password != "" && passwordError.textContent != "") {
-                passwordError.textContent = ""
-            }
+        if (password != "" && email != "") {
+          fetch("/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: email, password: password }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              console.log(data);
+              if (data.status === "success") {
+                window.location.href = "/inbox";
+              }
+              if (data.status === "Email not found") {
+                document.querySelector("#emailError").textContent =
+                  "Email not found";
+              }
 
-            if (password != "" && email != "") {
-                fetch('/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email: email, password: password })
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.status === 'Email not found') {
-                            document.querySelector('#emailError').textContent = 'Email not found';
-                        }
-
-                        if (data.status === 'Wrong password') {
-                            document.querySelector('#passwordError').textContent = 'Wrong password';
-                        }
-
-                        if (data.status === 'success') {
-                            window.location.href = '/inbox'
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                    });
-            }
-
-        });
-    </script>
-</body>
-
+              if (data.status === "Wrong password") {
+                document.querySelector("#passwordError").textContent =
+                  "Wrong password";
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
+      });
+  </script>
 </html>

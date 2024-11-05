@@ -1,44 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Inbox</title>
-</head>
+    <link rel="stylesheet" href="/styles/inbox.css" />
+  </head>
 
-<body>
+  <body>
     <h1>Inbox</h1>
     <button onclick="window.location.href='/compose'">Compose</button>
     <button onclick="window.location.href='/outbox'">Outbox</button>
+    <div class="button-container">
+      <button onclick="window.location.href='/logout'">Logout</button>
+    </div>
     <table>
-        <thead>
-            <tr>
-                <th>From</th>
-                <th>Subject</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% if (Array.isArray(inboxItems)) { %>
-                <% inboxItems.forEach(function(item) { %>
-                    <tr>
-                        <td><a href="/emailDetail/<%= item.id %>">
-                                <%= item.sender.name %>
-                            </a></td>
-                        <td><a href="/emailDetail/<%= item.id %>">
-                                <%= item.subject %>
-                            </a></td>
-                    </tr>
-                    <% }); %>
-                        <% } else { %>
-                            <tr>
-                                <td colspan="2">No items found.</td>
-                            </tr>
-                            <% } %>
-        </tbody>
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>Subject</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (Array.isArray(inboxItems)) { %> <%
+        inboxItems.forEach(function(item) { %>
+        <tr>
+          <td>
+            <a href="/emailDetail/<%= item.id %>"> <%= item.sender.name %> </a>
+          </td>
+          <td>
+            <a href="/emailDetail/<%= item.id %>"> <%= item.subject %> </a>
+          </td>
+        </tr>
+        <% }); %> <% } else { %>
+        <tr>
+          <td colspan="2">No items found.</td>
+        </tr>
+        <% } %>
+      </tbody>
     </table>
-
-
-</body>
-
+  </body>
 </html>

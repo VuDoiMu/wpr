@@ -1,102 +1,122 @@
-import { db } from "../../app.js";
-import { QUERY_RESULT } from "../../utils/enums.js";
-import { getUserByIDNoPassword, getUsersByListIDs } from "../User/User.js";
+const db = require("../../database.js");
+const { QUERY_RESULT } = require("../../utils/enums.js");
+const { getUserByIDNoPassword, getUsersByListIDs } = require("../User/User.js");
 
-export const getEmailByID = async (id) => {
-    let sql = "SELECT * FROM emails WHERE id = ?"
-    const [rows] = await db.promise().query(sql, [id])
+const getEmailByID = async (id) => {
+  let sql = "SELECT * FROM emails WHERE id = ?";
+  const [rows] = await db.promise().query(sql, [id]);
 
+  if (rows[0]) {
+    const senderData = await getUserByIDNoPassword(rows[0].sender_id);
+    const receiverData = await getUserByIDNoPassword(rows[0].receiver_id);
+    return {
+      status: QUERY_RESULT.FOUND_ONE,
+      data: {
+        id: rows[0].id,
+        sender: senderData.data,
+        receiver: receiverData.data,
+        subject: rows[0].subject,
+        message: rows[0].message,
+        sendDate: rows[0].created_at,
+        attachment: rows[0].attachment,
+      },
+    };
+  } else {
+    return {
+      status: QUERY_RESULT.NOT_FOUND,
+      data: "No Email with such ID!",
+    };
+  }
+};
+const getInboxByUserId = async (userId) => {
+  let sql = "SELECT * FROM emails WHERE receiver_id = ?";
+  const [rows] = await db.promise().query(sql, [userId]);
 
-    if (rows[0]) {
-        const senderData = await getUserByIDNoPassword(rows[0].sender_id)
-        const receiverData = await getUserByIDNoPassword(rows[0].receiver_id)
-        return {
-            status: QUERY_RESULT.FOUND_ONE,
-            data: {
-                id: rows[0].id,
-                sender: senderData.data,
-                receiver: receiverData.data,
-                subject: rows[0].subject,
-                message: rows[0].message,
-                sendDate: rows[0].created_at,
-                attachment: rows[0].attachment
-            }
-        }
-    } else {
-        return {
-            status: QUERY_RESULT.NOT_FOUND,
-            data: "No Email with such ID!"
-        }
-    }
+  const inboxEmails = rows;
+  const allSenderIds = inboxEmails.map((email) => {
+    return email.sender_id;
+  });
 
-}
-export const getInboxByUserId = async (userId) => {
-    let sql = "SELECT * FROM emails WHERE receiver_id = ?"
-    const [rows] = await db.promise().query(sql, [userId])
+  const uniqueSenderID = [...new Set(allSenderIds)];
 
-    const inboxEmails = rows
-    const allSenderIds = inboxEmails.map((email) => {
-        return email.sender_id
-    })
+  const uniqueSenders = await getUsersByListIDs(uniqueSenderID);
 
-    const uniqueSenderID = [...new Set(allSenderIds)]
+  const inboxData = inboxEmails.map((email) => {
+    return {
+      id: email.id,
+      sender: uniqueSenders.data.find(
+        (sender) => sender.id === email.sender_id
+      ),
+      subject: email.subject,
+      message: email.message,
+      createdDate: email.created_at,
+    };
+  });
 
-    const uniqueSenders = await getUsersByListIDs(uniqueSenderID)
+  return inboxData;
+};
 
-    const inboxData = inboxEmails.map((email) => {
+const getOutboxByUserId = async (userId) => {
+  let sql = "SELECT * FROM emails WHERE sender_id = ?";
+  const [rows] = await db.promise().query(sql, [userId]);
 
-        return {
-            id: email.id,
-            sender: uniqueSenders.data.find((sender) => sender.id === email.sender_id),
-            subject: email.subject,
-            message: email.message,
-            createdDate: email.created_at,
-        }
-    })
+  const Emails = rows;
+  const allReceiverIds = Emails.map((email) => {
+    return email.receiver_id;
+  });
 
-    return inboxData
-}
+  const uniqueReceiverIDs = [...new Set(allReceiverIds)];
 
-export const getOutboxByUserId = async (userId) => {
-    let sql = "SELECT * FROM emails WHERE sender_id = ?"
-    const [rows] = await db.promise().query(sql, [userId])
+  const uniqueReceivers = await getUsersByListIDs(uniqueReceiverIDs);
 
-    const Emails = rows
-    const allReceiverIds = Emails.map((email) => {
-        return email.receiver_id
-    })
+  const emailData = Emails.map((email) => {
+    return {
+      id: email.id,
+      receiver: uniqueReceivers.data.find(
+        (receiver) => receiver.id === email.receiver_id
+      ),
+      subject: email.subject,
+      message: email.message,
+      createdDate: email.created_at,
+    };
+  });
 
-    const uniqueReceiverIDs = [...new Set(allReceiverIds)]
+  return emailData;
+};
 
-    const uniqueReceivers = await getUsersByListIDs(uniqueReceiverIDs)
-
-    const emailData = Emails.map((email) => {
-
-        return {
-            id: email.id,
-            receiver: uniqueReceivers.data.find((receiver) => receiver.id === email.receiver_id),
-            subject: email.subject,
-            message: email.message,
-            createdDate: email.created_at,
-        }
-    })
-
-    return emailData
-}
-
-export const composeEmail = async (senderID, receiverID, subject, body, attachment) => {
-    const sql = `INSERT INTO emails (sender_id, receiver_id, subject, message, attachment) VALUES (?, ?, ?, ?, ?)`
-    const [rows] = await db.promise().query(sql, [senderID, receiverID, subject, body, attachment]);
+const composeEmail = async (
+  senderID,
+  receiverID,
+  subject,
+  body,
+  attachment
+) => {
+  try {
+    console.log({ senderID, receiverID, subject, body, attachment });
+    const sql = `INSERT INTO emails (sender_id, receiver_id, subject, message, attachment) VALUES (?, ?, ?, ?, ?)`;
+    const [rows] = await db
+      .promise()
+      .query(sql, [senderID, receiverID, subject, body, attachment]);
 
     if (rows) {
-        return ({
-            status: QUERY_RESULT.SUCCESS,
-            data: "Email sent!"
-        })
+      return {
+        status: QUERY_RESULT.SUCCESS,
+        data: "Email sent!",
+      };
     } else {
-        return ({
-            status: QUERY_RESULT.FAIL,
-            data: "Unable to sent email!"
-        })
+      return {
+        status: QUERY_RESULT.FAIL,
+        data: "Unable to sent email!",
+      };
     }
-}
+  } catch (error) {
+    console.log("compose error: ", error.message);
+  }
+};
+
+module.exports = {
+  composeEmail,
+  getEmailByID,
+  getInboxByUserId,
+  getOutboxByUserId,
+};

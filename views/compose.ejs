@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compose</title>
+    <link rel="stylesheet" href="/styles/compose.css">
 </head>
 
 <body>
@@ -38,7 +39,7 @@
 
     <script>
         const form = document.querySelector("#emailForm");
-        const formData = new FormData();
+
 
         form.addEventListener("submit", (event) => {
             event.preventDefault();
@@ -56,6 +57,7 @@
             }
 
             if (receiver) {
+                        const formData = new FormData();
                 formData.append('receiver', receiver)
                 formData.append('subject', subject)
                 formData.append('body', body);
@@ -69,6 +71,9 @@
                     .then((data) => {
                         console.log(data.data)
                         showAlert(data.data)
+                        document.querySelector("#subject").value = "(no subject)";
+                        document.querySelector("#body").value = "";  
+                        document.querySelector("#attachment").value = "";
                     })
                     .catch((error) => {
                         console.error(error);

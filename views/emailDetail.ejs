@@ -1,53 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Email Detail</title>
-</head>
+    <link rel="stylesheet" href="/styles/emailDetail.css" />
+  </head>
 
-<body>
+  <body>
     <h1>Email Detail</h1>
 
     <table>
-        <tr>
-            <td>From:</td>
-            <td>
-                <%= data.sender.name %> (<%= data.sender.email %>)
-            </td>
-        </tr>
-        <tr>
-            <td>To:</td>
-            <td>
-                <%= data.receiver.name %> (<%= data.receiver.email %>)
-            </td>
-        </tr>
-        <tr>
-            <td>Subject:</td>
-            <td>
-                <%= data.subject %>
-            </td>
-        </tr>
-        <tr>
-            <td>Message:</td>
-            <td>
-                <%= data.message %>
-            </td>
-        </tr>
-        <tr>
-            <td>Sent:</td>
-            <td>
-                <%= data.sendDate %>
-            </td>
-        </tr>
-
+      <tr>
+        <td>From:</td>
+        <td><%= data.sender.name %> (<%= data.sender.email %>)</td>
+      </tr>
+      <tr>
+        <td>To:</td>
+        <td><%= data.receiver.name %> (<%= data.receiver.email %>)</td>
+      </tr>
+      <tr>
+        <td>Subject:</td>
+        <td><%= data.subject %></td>
+      </tr>
+      <tr>
+        <td>Message:</td>
+        <td><%= data.message %></td>
+      </tr>
+      <tr>
+        <td>Sent:</td>
+        <td><%= data.sendDate %></td>
+      </tr>
     </table>
     <% if (data.attachment) { %>
-        <button onclick="window.location.href='/downloadAttachment/<%= data.id %>'">Download Attachment</button>
-        <% } %>
-            <br><button
-                onclick="window.location.href='/compose/<%= data.sender.id %>/<%= data.receiver.id %>/<%= data.subject %>'">Reply</button>
-</body>
-
+    <button onclick="window.location.href='/downloadAttachment/<%= data.id %>'">
+      Download Attachment
+    </button>
+    <% } %>
+    <br /><button
+      onclick="window.location.href='/compose/<%= data.sender.id %>/<%= data.receiver.id %>/<%= data.subject %>'"
+    >
+      Reply
+    </button>
+  </body>
 </html>
