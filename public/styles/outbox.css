@@ -1,0 +1,62 @@
+/* public/styles/outbox.css */
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #333;
+}
+
+button {
+  padding: 10px 15px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-top: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+.button-container {
+  text-align: right; /* Aligns content to the right */
+  margin-bottom: 20px; /* Optional: adds space below the button */
+}
+
+.button-container button {
+  padding: 10px 15px; /* Optional: adds padding for better appearance */
+  border: none; /* Removes default border */
+  background-color: #007bff; /* Example background color */
+  color: white; /* Text color */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.button-container button:hover {
+  background-color: #0056b3; /* Darker color on hover */
+}
