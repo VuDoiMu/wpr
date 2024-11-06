@@ -10,6 +10,11 @@
 
 <body>
     <h1>Composing</h1>
+    <button onclick="window.location.href='/inbox'">Inbox</button>
+    <button onclick="window.location.href='/outbox'">Outbox</button>
+    <div class="button-container">
+      <button onclick="window.location.href='/logout'">Logout</button>
+    </div>
     <form id="emailForm">
         <label for="receiver">Receiver: </label>
         <select id="receiver" name="receiver" required>
@@ -57,7 +62,7 @@
             }
 
             if (receiver) {
-                        const formData = new FormData();
+                const formData = new FormData();
                 formData.append('receiver', receiver)
                 formData.append('subject', subject)
                 formData.append('body', body);

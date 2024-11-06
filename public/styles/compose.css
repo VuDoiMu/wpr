@@ -1,5 +1,3 @@
-/* public/styles/compose.css */
-
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -18,6 +16,7 @@ form {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   max-width: 600px;
   margin: 20px auto;
+  align-items: center;
 }
 
 label {
@@ -52,7 +51,34 @@ button:hover {
   background-color: #0056b3;
 }
 
+.button-container {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.button-container button {
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#receiver {
+  width: 98.5%;
+}
+
 #receiverError {
   color: red;
   margin: 5px 0;
+}
+
+#subject {
+  width: 95%;
+}
+
+#body {
+  height: 300px;
+  width: 95%;
 }

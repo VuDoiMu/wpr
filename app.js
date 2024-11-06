@@ -56,7 +56,7 @@ const authCheck = (req, res, next) => {
 };
 // Set up routes
 app.get("/", authCheck, (req, res) => {
-  res.render("inbox");
+  res.redirect("/inbox");
 });
 
 app.get("/signin", (req, res) => {

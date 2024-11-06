@@ -19,6 +19,7 @@
         <tr>
           <th>From</th>
           <th>Subject</th>
+          <th>Message</th>
         </tr>
       </thead>
       <tbody>
@@ -30,6 +31,11 @@
           </td>
           <td>
             <a href="/emailDetail/<%= item.id %>"> <%= item.subject %> </a>
+          </td>
+          <td>
+            <div class="emailContent" href="/emailDetail/<%= item.id %>">
+              <%= item.message %>
+            </div>
           </td>
         </tr>
         <% }); %> <% } else { %>

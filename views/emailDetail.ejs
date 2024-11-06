@@ -10,25 +10,34 @@
   <body>
     <h1>Email Detail</h1>
 
+    <button onclick="window.location.href='/inbox'">Inbox</button>
+    <button onclick="window.location.href='/outbox'">Outbox</button>
+
+    <div class="button-container">
+      <button onclick="window.location.href='/logout'" class="logout-button">
+        Logout
+      </button>
+    </div>
+
     <table>
       <tr>
-        <td>From:</td>
+        <td class="label">From:</td>
         <td><%= data.sender.name %> (<%= data.sender.email %>)</td>
       </tr>
       <tr>
-        <td>To:</td>
+        <td class="label">To:</td>
         <td><%= data.receiver.name %> (<%= data.receiver.email %>)</td>
       </tr>
       <tr>
-        <td>Subject:</td>
+        <td class="label">Subject:</td>
         <td><%= data.subject %></td>
       </tr>
       <tr>
-        <td>Message:</td>
+        <td class="label">Message:</td>
         <td><%= data.message %></td>
       </tr>
       <tr>
-        <td>Sent:</td>
+        <td class="label">Sent:</td>
         <td><%= data.sendDate %></td>
       </tr>
     </table>
