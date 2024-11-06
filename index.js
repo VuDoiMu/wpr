@@ -12,7 +12,7 @@ const {
   handleLogin,
   handleRegister,
 } = require("./model/User/User.js");
-const { LOGIN_RESULT, BOUNDARY } = require("./utils/enums.js");
+const { LOGIN_RESULT } = require("./utils/enums.js");
 const {
   composeEmail,
   getEmailByID,
@@ -33,7 +33,6 @@ const upload = multer({
 });
 app.set("view engine", "ejs");
 
-// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
@@ -46,15 +45,15 @@ app.use(
 );
 
 const authCheck = (req, res, next) => {
-  const userId = req.cookies.userId; // Get userId from cookies
+  const userId = req.cookies.userId;
   console.log(req.cookies);
   if (!userId) {
-    res.redirect("/signin"); // Redirect to sign-in page if no userId in cookies
+    res.redirect("/signin");
   } else {
-    next(); // Proceed if userId is found in cookies
+    next();
   }
 };
-// Set up routes
+
 app.get("/", authCheck, (req, res) => {
   res.redirect("/inbox");
 });
@@ -126,9 +125,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-  // Clear the 'userId' cookie
   res.clearCookie("userId");
-  // Redirect to the login page or homepage
   res.redirect("/signin");
 });
 

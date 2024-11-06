@@ -43,7 +43,6 @@
           const passwordError = document.querySelector("#passwordError");
           const rePasswordError = document.querySelector("#rePasswordError");
 
-          console.log("HERE");
           if (userName === "") {
             console.log("User name cannot be empty");
             userNameError.textContent = "User name cannot be empty";
@@ -91,7 +90,6 @@
             rePassword === password &&
             userName != ""
           ) {
-            console.log("START FETCH");
             fetch("/register", {
               method: "POST",
               headers: {
